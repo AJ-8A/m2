@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <meta name="theme-color" content="#071014">
+  <title>AJChat Admin</title>
+  <link rel="stylesheet" href="../admin.css">
+</head>
+<body>
+  <main class="admin-shell">
+    <section class="admin-card" id="loginCard">
+      <div class="brand-mark">AJ</div>
+      <span class="eyebrow">PRIVATE CONTROL ROOM</span>
+      <h1>AJChat Admin</h1>
+      <p>Enter your private admin token to load the AJChat dashboard.</p>
+      <form id="adminForm">
+        <label for="adminToken">Admin token</label>
+        <input id="adminToken" type="password" autocomplete="current-password" placeholder="Enter admin token" required>
+        <button type="submit">Open dashboard</button>
+      </form>
+      <div class="status" id="loginStatus"></div>
+    </section>
+
+    <section class="dashboard hidden" id="dashboard">
+      <header class="topbar">
+        <div>
+          <span class="eyebrow">AJCHAT CONTROL ROOM</span>
+          <h1>Admin dashboard</h1>
+          <p>Live overview of users, conversations and friend requests.</p>
+        </div>
+        <div class="top-actions">
+          <button id="refreshButton" type="button">Refresh</button>
+          <button id="logoutButton" type="button" class="ghost">Lock</button>
+        </div>
+      </header>
+
+      <section class="stats-grid">
+        <article class="stat"><span>Users</span><strong id="usersStat">—</strong></article>
+        <article class="stat"><span>Messages</span><strong id="messagesStat">—</strong></article>
+        <article class="stat"><span>Messages today</span><strong id="messagesTodayStat">—</strong></article>
+        <article class="stat"><span>New users today</span><strong id="usersTodayStat">—</strong></article>
+        <article class="stat"><span>Friend links</span><strong id="friendshipsStat">—</strong></article>
+        <article class="stat"><span>Pending requests</span><strong id="requestsStat">—</strong></article>
+      </section>
+
+      <section class="panel activity-panel">
+        <div class="panel-head">
+          <div><h2>7-day activity</h2><span>Messages sent per day</span></div>
+        </div>
+        <div class="activity-chart" id="activityChart"></div>
+      </section>
+
+      <section class="panel online-users-panel">
+        <div class="panel-head">
+          <div><h2>Who's online</h2><span>Users active in the last 45 seconds.</span></div>
+          <strong class="online-admin-count" id="onlineAdminCount">0</strong>
+        </div>
+        <div class="online-user-list" id="onlineAdminList">
+          <div class="online-empty">No one is online right now.</div>
+        </div>
+      </section>
+
+      <section class="panel admin-users-panel">
+        <div class="panel-head">
+          <div><h2>User moderation</h2><span>Search, suspend for 7 days, or delete an account.</span></div>
+        </div>
+        <div class="admin-user-search">
+          <input id="userSearchInput" type="search" placeholder="Search username">
+          <button id="userSearchButton" type="button">Search</button>
+        </div>
+        <div class="admin-user-results" id="adminUserResults"><div class="online-empty">Search for a user to manage.</div></div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head">
+          <div><h2>Recent users</h2><span>Newest AJChat accounts</span></div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Username</th><th>Created</th></tr></thead>
+            <tbody id="usersTable"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="panel admin-friend-panel">
+        <div class="panel-head">
+          <div><h2>Make friends</h2><span>Admin-only: instantly connect any two existing users.</span></div>
+        </div>
+        <form id="forceFriendForm" class="force-friend-form">
+          <label>User A<input id="friendUserA" type="text" maxlength="24" placeholder="username" required></label>
+          <div class="force-friend-link">↔</div>
+          <label>User B<input id="friendUserB" type="text" maxlength="24" placeholder="username" required></label>
+          <button type="submit">Make them friends</button>
+        </form>
+        <div class="dashboard-status" id="forceFriendStatus"></div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head">
+          <div><h2>Friend requests</h2><span>Latest activity</span></div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>From</th><th>To</th><th>Status</th><th>Time</th></tr></thead>
+            <tbody id="requestsTable"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <div class="dashboard-status" id="dashboardStatus"></div>
+    </section>
+  </main>
+  <script src="../admin.js"></script>
+</body>
+</html>

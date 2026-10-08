@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0b141a">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icon.svg">
+  <meta name="description" content="AJChat — an original glass-style realtime messaging interface.">
+  <title>AJChat — Messages</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="ambient ambient-one" aria-hidden="true"></div>
+  <div class="ambient ambient-two" aria-hidden="true"></div>
+
+  <main class="app-shell">
+    <section class="messenger" aria-label="AJChat messenger">
+      <aside class="sidebar" id="sidebar">
+        <header class="sidebar-top">
+          <div class="brand">
+            <div class="brand-mark">AJ</div>
+            <div>
+              <strong>AJChat</strong>
+              <span>Private • Fast • Global</span>
+            </div>
+          </div>
+
+          <div class="sidebar-actions">
+            <button class="icon-button" id="newChatButton" type="button" aria-label="Add friend" title="Add friend">＋</button>
+            <button class="icon-button" id="socialProfileButton" type="button" title="Profile">◎</button>
+            <button class="icon-button" id="themeButton" type="button" aria-label="Toggle theme">◐</button>
+          </div>
+        </header>
+
+        <div class="search-wrap">
+          <label class="search-box" for="chatSearch">
+            <span>⌕</span>
+            <input id="chatSearch" type="search" placeholder="Search chats" autocomplete="off">
+            <kbd>/</kbd>
+          </label>
+        </div>
+
+        <section class="global-search-results hidden" id="globalSearchResults"></section>
+
+        <div class="filter-pills" role="tablist" aria-label="Chat filters">
+          <button class="filter-pill active" data-filter="all" type="button">All</button>
+          <button class="filter-pill" data-filter="unread" type="button">Unread</button>
+        </div>
+        <button class="global-entry" id="globalChatButton" type="button">
+          <span class="global-entry-icon">◎</span>
+          <span class="global-entry-copy"><strong>Global Chat</strong><small>Talk with the AJChat community</small></span>
+          <span class="global-entry-arrow">→</span>
+        </button>
+        <section class="notification-prompt hidden" id="notificationPrompt">
+          <div class="notification-prompt-icon">♢</div>
+          <div class="notification-prompt-copy">
+            <strong>Stay in the loop</strong>
+            <span>Get new message alerts on your phone, even when AJChat is closed.</span>
+          </div>
+          <button class="notification-prompt-button" id="enableNotificationsButton" type="button">Enable</button>
+        </section>
+
+        <section class="friend-requests" id="friendRequestsSection" hidden>
+          <div class="requests-heading">
+            <div>
+              <strong>Friend requests</strong>
+              <span id="requestCount">0 waiting</span>
+            </div>
+          </div>
+          <div class="request-list" id="requestList"></div>
+        </section>
+
+
+        <div class="chat-list" id="chatList"></div>
+
+
+      </aside>
+
+      <section class="chat-panel" id="chatPanel">
+        <header class="chat-header">
+          <button class="mobile-only icon-button" id="backButton" type="button" aria-label="Back to chats">‹</button>
+
+          <div class="chat-person">
+            <div class="avatar" id="chatAvatar">AJ</div>
+            <div>
+              <strong id="chatName">Select a friend</strong>
+              <span id="chatStatus">waiting for connection</span>
+            </div>
+          </div>
+
+          <div class="chat-actions">
+            <button class="icon-button" id="historyButton" type="button" title="Chat history">◷</button>
+            <button class="icon-button" id="chatSearchButton" type="button" title="Search in chat">⌕</button>
+            <button class="icon-button" id="notifyButton" type="button" title="Notifications">♢</button>
+          </div>
+        </header>
+
+        <div class="chat-scene">
+          <div class="nature-scenery" aria-hidden="true">
+            <div class="forest-moon"></div>
+            <div class="nature-haze haze-one"></div>
+            <div class="nature-haze haze-two"></div>
+            <div class="forest-tree-line tree-line-back"></div>
+            <div class="forest-tree-line tree-line-front"></div>
+            <div class="nature-hill hill-back"></div>
+            <div class="nature-hill hill-front"></div>
+            <div class="sakura-branch branch-left"></div>
+            <div class="sakura-branch branch-right"></div>
+            <div class="forest-figures">
+              <span class="forest-person person-left-girl" aria-hidden="true"></span>
+              <span class="forest-person person-left-boy" aria-hidden="true"></span>
+              <span class="forest-person person-right-girl" aria-hidden="true"></span>
+              <span class="forest-person person-right-boy" aria-hidden="true"></span>
+            </div>
+            <div class="forest-fireflies">
+              <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+            </div>
+            <div class="sakura-petals">
+              <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+              <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+              <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+              <i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+            </div>
+          </div>
+          <div class="date-chip">Today</div>
+          <div class="messages" id="messages" aria-live="polite"></div>
+          <div class="typing-row hidden" id="typingRow">
+            <div class="typing-avatar avatar">AJ</div>
+            <div class="typing-bubble">
+              <i></i><i></i><i></i>
+            </div>
+          </div>
+        </div>
+
+        <div class="reply-bar hidden" id="replyBar">
+          <div><span class="reply-label">Replying to</span><strong id="replyPreview"></strong></div>
+          <button class="icon-button" id="cancelReply" type="button" aria-label="Cancel reply">×</button>
+        </div>
+                        <form class="composer" id="composer">
+          <button class="icon-button" type="button" id="emojiButton" aria-label="Add emoji">☺</button>
+          <input id="messageInput" type="text" maxlength="500" placeholder="Write a message…" autocomplete="off" aria-label="Message">
+          <button class="send-button" type="submit" aria-label="Send message">➤</button>
+        </form>
+      </section>
+
+      <section class="social-panel hidden" id="socialPanel">
+        <header class="social-header">
+          <div>
+            <span class="eyebrow">AJCHAT SOCIAL</span>
+            <h2 id="socialTitle">Home feed</h2>
+            <p id="socialSubtitle">See what your people are sharing.</p>
+          </div>
+          <button class="icon-button" id="socialCloseButton" type="button">×</button>
+        </header>
+        <div class="global-only-label"><span class="global-only-dot"></span> Live community room</div>
+        <div class="social-content" id="socialContent">
+          <div class="social-loading">Loading your social world…</div>
+        </div>
+      </section>
+
+      <!-- Friend details panel removed: the main chat stays focused on real conversations. -->
+    </section>
+  </main>
+
+
+  <div class="auth-screen" id="authScreen">
+    <div class="auth-card">
+      <div class="brand auth-brand"><div class="brand-mark">AJ</div><div><strong>AJChat</strong><span>Real friends. Real messages.</span></div></div>
+      <div class="auth-copy"><span class="eyebrow">PRIVATE MESSAGING</span><h1>Talk to your people.</h1><p>Create your AJChat account, find your friends, and message across devices.</p></div>
+      <form id="authForm" class="auth-form">
+        <label>Username<input id="authUsername" name="username" minlength="3" maxlength="24" autocomplete="username" required placeholder="Choose a username"></label>
+        <label>Password<input id="authPassword" name="password" minlength="8" maxlength="72" type="password" autocomplete="current-password" required placeholder="At least 8 characters"></label>
+        <button class="button auth-submit" id="authSubmit" type="submit">Sign in</button>
+      </form>
+      <button class="auth-switch" id="authSwitch" type="button">New here? Create an account</button>
+      <p class="auth-message" id="authMessage" role="status"></p>
+    </div>
+  </div>
+
+  <div class="pro-modal hidden" id="profileModal" aria-hidden="true">
+    <div class="pro-modal-card">
+      <button class="pro-modal-close" id="profileClose" type="button">×</button>
+      <div class="profile-avatar-editor" id="profileAvatarPreview">✨</div>
+      <span class="eyebrow">AJCHAT PROFILE</span>
+      <h2 id="profileTitle">Profile</h2>
+      <p id="profileStatusPreview">Available to chat</p>
+      <label>Avatar<input id="profileAvatar" maxlength="8" placeholder="✨"></label>
+      <label>Status<input id="profileStatus" maxlength="80" placeholder="Available to chat"></label>
+      <label>Bio<textarea id="profileBio" maxlength="160" placeholder="Tell people something about you"></textarea></label>
+      <div class="modal-actions"><button class="button" id="saveProfileButton" type="button">Save profile</button><button class="button ghost-button" id="closeProfileButton" type="button">Close</button></div>
+      <div class="security-actions">
+        <button class="button ghost-button" id="changePasswordButton" type="button">Change password</button>
+        <button class="button ghost-button danger-button" id="logoutAllButton" type="button">Log out all devices</button>
+      </div>
+      <p class="profile-note" id="profileNote"></p>
+    </div>
+  </div>
+  <section class="call-overlay hidden" id="callOverlay" aria-live="polite">
+    <div class="call-card">
+      <div class="call-topline"><span class="eyebrow">AJCHAT CALL</span><span id="callTimer">00:00</span></div>
+      <div class="call-videos">
+        <div class="remote-stage"><video id="remoteVideo" autoplay playsinline></video><div class="call-placeholder" id="callPlaceholder">Connecting…</div></div>
+        <video class="local-stage" id="localVideo" autoplay playsinline muted></video>
+        <audio id="remoteAudio" autoplay></audio>
+      </div>
+      <div class="call-person"><div class="avatar" id="callAvatar">AJ</div><div><strong id="callName">AJChat user</strong><span id="callState">Calling…</span></div></div>
+      <div class="call-controls">
+        <button class="call-control" id="callMuteButton" type="button">🎙</button>
+        <button class="call-control" id="callCameraButton" type="button">▣</button>
+        <button class="call-control end" id="callEndButton" type="button">✕</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="incoming-call-overlay hidden" id="incomingCallOverlay">
+    <div class="incoming-call-card">
+      <div class="profile-avatar-editor">☎</div>
+      <span class="eyebrow">INCOMING CALL</span>
+      <h2 id="incomingCallName">AJChat user</h2>
+      <p id="incomingCallMode">Voice call</p>
+      <div class="modal-actions"><button class="button" id="acceptCallButton" type="button">Accept</button><button class="button ghost-button" id="rejectCallButton" type="button">Decline</button></div>
+    </div>
+  </section>
+
+  <section class="history-modal hidden" id="historyModal" aria-hidden="true">
+    <div class="history-card">
+      <header class="history-head">
+        <div>
+          <span class="eyebrow">CHAT HISTORY</span>
+          <h2 id="historyTitle">Conversation history</h2>
+          <p id="historySubtitle">Recent messages from this conversation.</p>
+        </div>
+        <button class="icon-button" id="historyClose" type="button" aria-label="Close history">×</button>
+      </header>
+      <div class="history-tools">
+        <label class="history-search" for="historySearchInput">
+          <span>⌕</span>
+          <input id="historySearchInput" type="search" placeholder="Search this history…" autocomplete="off">
+        </label>
+        <button class="history-refresh" id="historyRefreshButton" type="button">Refresh</button>
+      </div>
+      <div class="history-list" id="historyList">
+        <div class="history-empty">Open a conversation to see its history.</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="emoji-panel hidden" id="emojiPanel" aria-label="Emoji picker">
+    <button type="button">😀</button><button type="button">😂</button><button type="button">❤️</button><button type="button">👍</button>
+    <button type="button">🔥</button><button type="button">😮</button><button type="button">😢</button><button type="button">🎉</button>
+    <button type="button">✨</button><button type="button">🥳</button><button type="button">💯</button><button type="button">🚀</button>
+  </div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="app.js?v=20261007-global-history"></script>
+</body>
+</html>
