@@ -660,11 +660,21 @@ async function handleFriendRequest(requestId,action){
     showToast(action==="accept"?"Friend request accepted.":"Friend request declined.");
   }catch(error){showToast(error.message);}
 }
+function enterFirstChatMode(){
+  document.body.classList.add("first-chat-mode");
+  state.activeFriend=null;
+  state.activeGroup=null;
+  state.messages=[];
+  el("chatAvatar").textContent="M2";
+  el("chatName").textContent="Start your first chat";
+  el("chatStatus").textContent="Choose a friend to begin";
+  messagesBox.innerHTML='<div class="first-chat-welcome"><div class="first-chat-mark">M2</div><span class="eyebrow">YOUR FIRST CHAT</span><h2>Start a conversation</h2><p>Pick a friend from the left, or add someone new. Your first chat opens here — simple and focused.</p><button type="button" class="first-chat-cta" id="firstChatAddButton">＋ Add a friend</button></div>';
+  el("firstChatAddButton")?.addEventListener("click",addFriend);
+}
+function leaveFirstChatMode(){document.body.classList.remove("first-chat-mode");}
 function renderEmptyFriends(){
+  enterFirstChatMode();
   chatList.innerHTML='<div class="empty-friends"><strong>No friends yet.</strong><span>Tap ＋ and enter a friend\'s username.</span></div>';
-  el("chatName").textContent="Your friends";
-  el("chatStatus").textContent="Add someone to start";
-  messagesBox.innerHTML='<div class="empty-chat"><strong>Your chat is waiting.</strong><span>Add a friend and they can message you from their own device.</span></div>';
 }
 
 function renderTyping(show, username=state.activeFriend){
