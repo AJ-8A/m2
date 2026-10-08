@@ -388,6 +388,14 @@ async function renderProfileSocial(username=state.me?.username){
   el("editSocialProfile")?.addEventListener("click",()=>openProfile(state.me.username,true));
 }
 async function loadSocial(tab=state.socialTab){
+  if(!state.token||!state.me){
+    closeGlobalSocket();
+    el("socialPanel").classList.add("hidden");
+    el("chatPanel").classList.remove("hidden");
+    showAuth(true);
+    setAuthMessage("Please sign in to continue.",true);
+    return;
+  }
   if(state.socialTab==="global"&&tab!=="global")closeGlobalSocket();
   state.socialTab=tab;
   el("chatPanel").classList.add("hidden");el("socialPanel").classList.remove("hidden");
