@@ -1,12 +1,12 @@
 {
-  "name":"AJChat",
-  "short_name":"AJChat",
-  "id":"/AJChat/",
-  "start_url":"/AJChat/",
-  "scope":"/AJChat/",
+  "name":"M2 Chat",
+  "short_name":"M2 Chat",
+  "id":"/M2 Chat/",
+  "start_url":"/M2 Chat/",
+  "scope":"/M2 Chat/",
   "display":"standalone",
   "background_color":"#071014",
   "theme_color":"#0b141a",
-  "description":"AJChat — private realtime messaging with voice and video calls.",
+  "description":"M2 Chat — private realtime messaging with voice and video calls.",
   "icons":[{"src":"icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]
 }
