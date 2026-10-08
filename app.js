@@ -163,7 +163,7 @@ async function submitAuth(event){
           messagesBox.innerHTML='<div class="empty-chat"><strong>Your chat is waiting.</strong><span>Tap a friend above to open the conversation.</span></div>';
           showMobileFriendList();
         }else{
-          await selectFriend(state.friends[0].username);
+          enterFirstChatMode();
         }
       }else{
         renderEmptyFriends();
@@ -435,8 +435,7 @@ async function boot(){
     ]).then(async()=>{
       renderFriendList();
       if(!state.activeFriend){
-        if(state.friends.length) await selectFriend(state.friends[0].username);
-        else renderEmptyFriends();
+        enterFirstChatMode();
       }
     }).catch(()=>{
       renderFriendList();
@@ -700,6 +699,7 @@ async function selectFriend(username){
   const loadSeq=++state.chatLoadSeq;
   state.activeGroup=null;
   state.activeFriend=username;
+  leaveFirstChatMode();
   state.messages=[];
   renderTyping(false, username);
   renderFriendList();
@@ -747,6 +747,7 @@ async function selectGroup(groupId){
   ++state.chatLoadSeq;
   state.activeFriend=null;
   state.activeGroup=Number(groupId);
+  leaveFirstChatMode();
   renderTyping(false);
   renderFriendList();
 
@@ -1479,7 +1480,7 @@ el("backButton").addEventListener("click",()=>{
   state.activeFriend=null;
   state.activeGroup=null;
   state.messages=[];
-  messagesBox.innerHTML='<div class="empty-chat"><strong>Select a friend.</strong><span>Tap a name to open the chat.</span></div>';
+  enterFirstChatMode();
   el("chatName").textContent="Select a friend";
   el("chatStatus").textContent="Tap a name to start chatting";
   showMobileFriendList();
