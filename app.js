@@ -155,16 +155,8 @@ async function submitAuth(event){
     ]).then(async()=>{
       renderFriendList();
       if(state.friends.length){
-        if(isMobileLayout()){
-          state.activeFriend=null;
-          state.activeGroup=null;
-          el("chatName").textContent="Select a friend";
-          el("chatStatus").textContent="Tap a name to start chatting";
-          messagesBox.innerHTML='<div class="empty-chat"><strong>Your chat is waiting.</strong><span>Tap a friend above to open the conversation.</span></div>';
-          showMobileFriendList();
-        }else{
-          enterFirstChatMode();
-        }
+        enterFirstChatMode();
+        if(isMobileLayout())showMobileFriendList();
       }else{
         renderEmptyFriends();
       }
