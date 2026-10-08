@@ -52,6 +52,7 @@ const messagesBox = el("messages");
 const input = el("messageInput");
 const CHAT_CACHE_PREFIX="ajchat_history_v2:";
 const CHAT_CACHE_LIMIT=120;
+const LAST_CHAT_KEY="m2_last_chat";
 function chatCacheKey(kind,id){return CHAT_CACHE_PREFIX+kind+":"+String(id||"").toLowerCase()}
 function readChatCache(kind,id){try{const raw=localStorage.getItem(chatCacheKey(kind,id));const data=raw?JSON.parse(raw):[];return Array.isArray(data)?data:[]}catch{return []}}
 function writeChatCache(kind,id,messages){if(!id)return;try{localStorage.setItem(chatCacheKey(kind,id),JSON.stringify((messages||[]).slice(-CHAT_CACHE_LIMIT)))}catch{}}
@@ -176,12 +177,7 @@ async function submitAuth(event){
       loadFriendRequests()
     ]).then(async()=>{
       renderFriendList();
-      if(state.friends.length){
-        enterFirstChatMode();
-        if(isMobileLayout())showMobileFriendList();
-      }else{
-        renderEmptyFriends();
-      }
+      await restoreLastChat();
     }).catch(error=>{
       renderFriendList();
       if(!state.friends.length && !state.activeFriend) renderEmptyFriends();
@@ -457,9 +453,7 @@ async function boot(){
       loadFriendRequests()
     ]).then(async()=>{
       renderFriendList();
-      if(!state.activeFriend){
-        enterFirstChatMode();
-      }
+      await restoreLastChat();
     }).catch(error=>{
       renderFriendList();
       if(!state.friends.length) renderEmptyFriends();
@@ -733,6 +727,7 @@ async function selectFriend(username){
   const loadSeq=++state.chatLoadSeq;
   state.activeGroup=null;
   state.activeFriend=username;
+  localStorage.setItem(LAST_CHAT_KEY,username);
   leaveFirstChatMode();
   state.messages=[];
   renderTyping(false, username);
