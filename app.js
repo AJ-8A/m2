@@ -1,9 +1,10 @@
 const API_BASE = "https://ajchat-api.study4u-aj.workers.dev";
+const TOKEN_KEY = "m2_token";
 const WS_BASE = API_BASE.replace(/^http/,"ws");
 
 const state = {
   mode: "login",
-  token: localStorage.getItem("ajchat_token") || "",
+  token: localStorage.getItem(TOKEN_KEY) || localStorage.getItem("ajchat_token") || "",
   me: null,
   friends: [],
   groups: [],
@@ -97,8 +98,28 @@ async function api(path,options={}){
   });
   let data={};
   try{data=await response.json()}catch{}
-  if(!response.ok) throw new Error(data.error||"Request failed");
+  if(!response.ok){
+    if(response.status===401 && !path.startsWith("/api/auth/")){
+      handleSessionExpired();
+    }
+    throw new Error(data.error||"Request failed");
+  }
   return data;
+}
+
+function handleSessionExpired(){
+  if(!state.token)return;
+  state.token=""; state.me=null;
+  localStorage.removeItem(TOKEN_KEY); localStorage.removeItem("ajchat_token");
+  clearInterval(state.presenceTimer); state.presenceTimer=null;
+  clearInterval(state.friendRefreshTimer); state.friendRefreshTimer=null;
+  clearInterval(state.friendRequestTimer); state.friendRequestTimer=null;
+  clearInterval(state.pollTimer); state.pollTimer=null;
+  clearInterval(state.groupPollTimer); state.groupPollTimer=null;
+  try{state.socket?.close()}catch{} state.socket=null;
+  try{state.globalSocket?.close()}catch{} state.globalSocket=null;
+  showAuth(true);
+  setAuthMessage("Your session expired. Please sign in again.",true);
 }
 
 function setAuthMessage(text,error=false){
@@ -132,7 +153,8 @@ async function submitAuth(event){
 
     state.token=data.token;
     state.me=data.user;
-    localStorage.setItem("ajchat_token",state.token);
+    localStorage.setItem(TOKEN_KEY,state.token);
+    localStorage.removeItem("ajchat_token");
 
     showAuth(false);
     setAuthMessage("");
@@ -160,9 +182,10 @@ async function submitAuth(event){
       }else{
         renderEmptyFriends();
       }
-    }).catch(()=>{
+    }).catch(error=>{
       renderFriendList();
-      renderEmptyFriends();
+      if(!state.friends.length && !state.activeFriend) renderEmptyFriends();
+      showToast(error?.message||"Could not load your friends.");
     });
   }catch(error){
     setAuthMessage(error.message,true);
@@ -429,9 +452,10 @@ async function boot(){
       if(!state.activeFriend){
         enterFirstChatMode();
       }
-    }).catch(()=>{
+    }).catch(error=>{
       renderFriendList();
-      renderEmptyFriends();
+      if(!state.friends.length) renderEmptyFriends();
+      showToast(error?.message||"Could not load your friends.");
     });
   }catch{
     localStorage.removeItem("ajchat_token");
